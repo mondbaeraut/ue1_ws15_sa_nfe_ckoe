@@ -1,17 +1,18 @@
 package indsys.Data;
 
 
+import java.util.HashMap;
+import java.util.LinkedList;
+
 /**
  * Created by mod on 11/2/15.
  */
 public class PackageOrderEnrichment implements Package {
-    private int index;
-    private  String value;
+    private HashMap<Integer,LinkedList<String>> value;
 
-    public PackageOrderEnrichment(String value) {
+
+    public PackageOrderEnrichment(HashMap<Integer,LinkedList<String>> value) {
         this.value = value;
-        String temp = value.toUpperCase();
-        index = temp.charAt(0)-65;
     }
 
     @Override
@@ -21,11 +22,8 @@ public class PackageOrderEnrichment implements Package {
 
     @Override
     public int getIndex() {
-        return index;
+        return 0;
     }
 
-    @Override
-    public String toString() {
-        return "["+ value + " " + index+"]";
-    }
+
 }

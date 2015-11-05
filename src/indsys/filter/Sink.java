@@ -3,7 +3,7 @@ package indsys.filter;
 import indsys.Data.Package;
 import indsys.pipes.BufferedPipe;
 import indsys.pipes.Pipe;
-import indsys.pipes.PipeImpl;
+
 
 import java.io.*;
 import java.util.HashMap;
@@ -18,36 +18,44 @@ public class Sink<T>{
     private T _out;
     boolean endFile = false;
     boolean endfound = false;
-    private HashMap<Integer,LinkedList<Package>> result = new HashMap<>();
+    private HashMap<Integer,LinkedList<String>> result = new HashMap<>();
     public Sink(T in, T out){
         _in = in;
         _out = out;
     }
 
     public T read() {
-        boolean endfound = false;
         while (!endfound && !endFile) {
-            indsys.Data.Package pair = (Package) ((PipeImpl)_in).getNext();
-            endfound = ((Pipe) _out).isFull();
+            indsys.Data.Package pair = (Package) ((Pipe)_in).getNext();
+            endfound = ((Pipe) _in).isEmpty();
             if (endfound == false) {
-                if (pair.getIndex() != -2) {
-                    if (pair.getIndex() != -1) {
-                        if (result.containsKey(pair.getIndex())) {
-                            LinkedList<Package> temp = result.get(pair.getIndex());
-                            temp.add(pair);
-                        } else {
-                            result.put(pair.getIndex(), new LinkedList<Package>());
-                            LinkedList<Package> temp = result.get(pair.getIndex());
-                            temp.add(pair);
-                        }
-                    }
-                } else {
-                    System.out.println("DONE!!!!");
-                    endfound = true;
+                if (pair.getIndex() != -1) {
+
+
+                    result.putAll((HashMap<Integer, LinkedList<String>>) pair.getValue());
+                    HashMap<Integer, LinkedList<String>>temp = (HashMap<Integer, LinkedList<String>>) pair.getValue();
+                    for(Map.Entry e : temp.entrySet()){
+                    if (result.containsKey(temp)) {
+                        LinkedList<String> temp2 = result.get(key);
+                        temp2.add(s + " " + pair.getIndex());
+                    } else {
+                        result.put(key,new LinkedList<>());
+                        LinkedList<String> temp2 = result.get(key);
+                        temp.add(s + " " + pair.getIndex());
+
+                    }}
                 }
             }
+                if(pair.getIndex() != -2){
+
+                }
+                else {
+                    System.out.println("DONE!!!!");
+                    endFile = true;
+                }
         }
 
+        endfound = false;
         return _out;
     }
     private void writeFile() throws IOException {
@@ -60,8 +68,8 @@ public class Sink<T>{
         writer.write("Fuck you alice!");
         writer.write("\n");
         for(Map.Entry e : result.entrySet()){
-            for(Package p:((LinkedList<Package>)e.getValue())){
-                writer.write((String)p.getValue());
+            for(String p:((LinkedList<String>)e.getValue())){
+                writer.write((String)p);
                 writer.write("\n");
             }
         }
@@ -88,13 +96,14 @@ public class Sink<T>{
         Pipe pipe3 = new BufferedPipe<>(4);
         Pipe pipe4 = new BufferedPipe<>(4);
         Pipe pipe5 = new BufferedPipe<>(4);
+        Pipe pipe6 = new BufferedPipe<>(4);
 
-        FileReadFilter frf = new FileReadFilter(new File("aliceInWonderland2.txt"),pipe);
+        FileReadFilter frf = new FileReadFilter(new File("aliceInWonderland.txt"),pipe);
         AbstractFilter splitFilter = new Splitfilter<>(pipe,pipe2);
         RotateFilter rotateFilter = new RotateFilter(pipe2,pipe3);
         UslessWordsFilter uslessWordsFilter = new UslessWordsFilter(pipe3,pipe4);
         OrderFilter orderFilter = new OrderFilter(pipe4,pipe5);
-        Sink sinkFilter = new Sink(pipe5,null);
+        Sink sinkFilter = new Sink(pipe5,pipe6);
 
         while(!sinkFilter.isEndFile()) {
             frf.read();

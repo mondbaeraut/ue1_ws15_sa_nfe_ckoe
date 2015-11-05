@@ -29,13 +29,24 @@ public class OrderFilter<T> extends AbstractFilter<T> {
         if(((Pipe)_out).isEmpty()) {
             while (!endfound && !endFile) {
                 Package pair = (Package) ((Pipe) _in).getNext();
+                HashMap<Integer,LinkedList<String>> map = new HashMap<>();
                 endfound = ((Pipe) _out).isFull();
                 if (endfound == false) {
                     if(pair != null) {
                         if (pair.getIndex() != -2) {
                             if (pair.getIndex() != -1) {
                                 for (String s : (LinkedList<String>) pair.getValue()) {
-                                    ((Pipe) _out).put(new PackageOrderEnrichment(s + " " + pair.getIndex()));
+                                    int key = s.toUpperCase().charAt(0)-65;
+                                    if (map.containsKey(key)) {
+                                        LinkedList<String> temp = map.get(key);
+                                        temp.add(s + " " + pair.getIndex());
+                                    } else {
+                                        map.put(key,new LinkedList<>());
+                                        LinkedList<String> temp = map.get(key);
+                                        temp.add(s + " " + pair.getIndex());
+
+                                    }
+                                    ((Pipe) _out).put(new PackageOrderEnrichment(map));
                                 }
                             } else {
                                 endfound = true;

@@ -42,9 +42,12 @@ public class UslessWordsFilter<T> extends AbstractFilter<T> {
                                 if (stopword.contains(arrtemp[0].toLowerCase())) {
 
                                 } else {
-                                    ((Pipe) _out).put(new PackageLine(pair.getIndex(),s));
+                                    split.add(s);
                                 }
                             }
+                            LinkedList<String>temp = split;
+                            ((Pipe) _out).put(new PackageRotate<>(pair.getIndex(), temp));
+
                         } else {
                             //((Pipe) _out).put(pair);
                             endfound = true;
@@ -56,6 +59,7 @@ public class UslessWordsFilter<T> extends AbstractFilter<T> {
                 }
             }
         }
+        endfound = false;
     return _out;
             }
 
@@ -97,17 +101,25 @@ public class UslessWordsFilter<T> extends AbstractFilter<T> {
         Pipe pipe3 = new BufferedPipe<>(4);
         Pipe pipe4 = new BufferedPipe<>(4);
         FileReadFilter frf = new FileReadFilter(new File("aliceInWonderland.txt"),pipe);
-        frf.read();
+
 
         AbstractFilter splitFilter = new Splitfilter<>(pipe,pipe2);
-        splitFilter.read();
+
 
         RotateFilter rotateFilter = new RotateFilter(pipe2,pipe3);
-        rotateFilter.read();
+
 
         UslessWordsFilter uslessWordsFilter = new UslessWordsFilter(pipe3,pipe4);
-        while(!uslessWordsFilter.getEndPackage()) {
+        while(!uslessWordsFilter.isEndFile()) {
+            frf.read();
+            splitFilter.read();
+            rotateFilter.read();
             System.out.println(uslessWordsFilter.read());
+            pipe.clean();
+            pipe2.clean();
+            pipe3.clean();
+            pipe4.clean();
+            uslessWordsFilter.setEndFound();
         }
         System.out.println("done");
     }
