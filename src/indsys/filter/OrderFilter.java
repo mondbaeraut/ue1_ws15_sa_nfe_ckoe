@@ -4,7 +4,6 @@ import indsys.Data.*;
 import indsys.Data.Package;
 import indsys.pipes.BufferedPipe;
 import indsys.pipes.Pipe;
-import indsys.pipes.PipeImpl;
 
 import java.io.File;
 import java.util.HashMap;
@@ -104,7 +103,7 @@ public class OrderFilter<T> extends AbstractFilter<T> {
         Pipe pipe2 = new BufferedPipe<>(4);
         Pipe pipe3 = new BufferedPipe<>(4);
         Pipe pipe4 = new BufferedPipe<>(4);
-        FileReadFilter frf = new FileReadFilter(new File("aliceInWonderland.txt"),pipe);
+        FileReadFilterLine frf = new FileReadFilterLine(new File("aliceInWonderland.txt"),pipe);
         AbstractFilter splitFilter = new Splitfilter<>(pipe,pipe2);
         RotateFilter rotateFilter = new RotateFilter(pipe2,pipe3);
         OrderFilter orderFilter = new OrderFilter(pipe3,pipe4);

@@ -35,7 +35,7 @@ public class Sink<T>{
                     result.putAll((HashMap<Integer, LinkedList<String>>) pair.getValue());
                     HashMap<Integer, LinkedList<String>>temp = (HashMap<Integer, LinkedList<String>>) pair.getValue();
                     for(Map.Entry e : temp.entrySet()){
-                    if (result.containsKey(temp)) {
+                  /*  if (result.containsKey(temp)) {
                         LinkedList<String> temp2 = result.get(key);
                         temp2.add(s + " " + pair.getIndex());
                     } else {
@@ -43,7 +43,7 @@ public class Sink<T>{
                         LinkedList<String> temp2 = result.get(key);
                         temp.add(s + " " + pair.getIndex());
 
-                    }}
+                    }*/}
                 }
 
             }
@@ -99,7 +99,7 @@ public class Sink<T>{
         Pipe pipe5 = new BufferedPipe<>(4);
         Pipe pipe6 = new BufferedPipe<>(4);
 
-        FileReadFilter frf = new FileReadFilter(new File("aliceInWonderland.txt"),pipe);
+        FileReadFilterLine frf = new FileReadFilterLine(new File("aliceInWonderland.txt"),pipe);
         AbstractFilter splitFilter = new Splitfilter<>(pipe,pipe2);
         RotateFilter rotateFilter = new RotateFilter(pipe2,pipe3);
         UslessWordsFilter uslessWordsFilter = new UslessWordsFilter(pipe3,pipe4);

@@ -114,7 +114,7 @@ public class RotateFilter<T> extends AbstractFilter<T> {
         Pipe pipe = new BufferedPipe<>(4);
         Pipe pipe2 = new BufferedPipe<>(4);
         Pipe pipe3 = new BufferedPipe<>(4);
-        FileReadFilter frf = new FileReadFilter(new File("aliceInWonderland.txt"),pipe);
+        FileReadFilterLine frf = new FileReadFilterLine(new File("aliceInWonderland.txt"),pipe);
         AbstractFilter splitFilter = new Splitfilter<>(pipe,pipe2);
         RotateFilter rotateFilter = new RotateFilter(pipe2,pipe3);
         while(!rotateFilter.isEndFile()) {

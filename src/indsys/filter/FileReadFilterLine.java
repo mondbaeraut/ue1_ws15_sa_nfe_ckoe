@@ -4,19 +4,17 @@ import indsys.Data.*;
 import indsys.Data.Package;
 import indsys.pipes.BufferedPipe;
 import indsys.pipes.Pipe;
-import indsys.pipes.PipeImpl;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
  * Created by mod on 10/29/15.
  */
-public class FileReadFilter<T> extends AbstractFilter<T> {
+public class FileReadFilterLine<T> extends AbstractFilter<T> {
     private int _currentPos = 0;
     private T _in;
     private T _out;
@@ -25,7 +23,7 @@ public class FileReadFilter<T> extends AbstractFilter<T> {
     private boolean endFile = false;
     private boolean endfound = false;
 
-    public FileReadFilter(T in, T out) {
+    public FileReadFilterLine(T in, T out) {
         _in = in;
         _out = out;
         readFile();
@@ -113,7 +111,7 @@ public class FileReadFilter<T> extends AbstractFilter<T> {
 
     public static void main(String[] args) {
         BufferedPipe pipe1 = new BufferedPipe(4);
-        FileReadFilter frf = new FileReadFilter(new File("aliceInWonderland.txt"), pipe1);
+        FileReadFilterLine frf = new FileReadFilterLine(new File("aliceInWonderland.txt"), pipe1);
         while (!frf.isEndFile()) {
             pipe1 = (BufferedPipe) frf.read();
             System.out.println(pipe1.toString());

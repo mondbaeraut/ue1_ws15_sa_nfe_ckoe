@@ -4,7 +4,6 @@ import indsys.Data.*;
 import indsys.Data.Package;
 import indsys.pipes.BufferedPipe;
 import indsys.pipes.Pipe;
-import indsys.pipes.PipeImpl;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -89,7 +88,7 @@ public class Splitfilter<T> extends AbstractFilter<T>{
     public static void main(String[] args) {
         BufferedPipe pipe = new BufferedPipe<>(4);
         BufferedPipe pipe2 = new BufferedPipe<>(4);
-        FileReadFilter frf = new FileReadFilter(new File("aliceInWonderland.txt"), pipe);
+        FileReadFilterLine frf = new FileReadFilterLine(new File("aliceInWonderland.txt"), pipe);
         Splitfilter splitfilter = new Splitfilter(pipe, pipe2);
         while(!splitfilter.isEndFile()) {
             frf.read();
