@@ -12,11 +12,12 @@ import java.util.LinkedList;
 public class SourceFileChar<T> {
 
     private static LinkedList<PackageChar> charlist = new LinkedList<>();
-    public SourceFileChar(File file){
+
+    public SourceFileChar(File file) {
         readFromFile(file);
     }
 
-    private void readFromFile(File file){
+    private void readFromFile(File file) {
         BufferedReader br = null;
         try {
 
@@ -26,19 +27,20 @@ public class SourceFileChar<T> {
             int index = 0;
             while ((r = br.read()) != -1) {
                 char ch = (char) r;
-                charlist.add(new PackageChar(index,ch));
-                index ++;
+
+                charlist.add(new PackageChar(index, ch));
+                index++;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public T getNextChar(){
-        if(charlist.size() > 0) {
+    public T getNextChar() {
+        if (charlist.size() > 0) {
             return (T) charlist.removeFirst();
-        }else{
-            return (T)new PackageEndFile();
+        } else {
+            return (T) new PackageEndFile();
         }
     }
 

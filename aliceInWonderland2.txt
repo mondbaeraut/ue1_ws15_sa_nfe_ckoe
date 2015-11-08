@@ -3472,7 +3472,7 @@ come to the end; then stop."
 There was dead silence in the court, whilst the White Rabbit read out
 these verses:--
 
-          "They told me you had been to her,
+        "They told me you had been to her,
              And mentioned me to him:
            She gave me a good character,
              But said I could not swim.

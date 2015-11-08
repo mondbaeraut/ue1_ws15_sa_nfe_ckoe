@@ -70,7 +70,7 @@ public class LinesGeneratorFilter<T> extends AbstractFilter<T> {
     }
 
     public static void main(String[] args) {
-        SourceFileChar charFile = new SourceFileChar(new File("aliceInWonderland.txt"));
+        SourceFileChar charFile = new SourceFileChar(new File("aliceInWonderland2.txt"));
         FileReadFilterChar fileReadFilterChar = new FileReadFilterChar(charFile);
         BufferedPipeExtended bufferedPipeExtended = new BufferedPipeExtended(fileReadFilterChar);
         WordBuilderFilter wordBuilderFilter = new WordBuilderFilter(bufferedPipeExtended);

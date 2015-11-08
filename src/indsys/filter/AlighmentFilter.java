@@ -23,7 +23,7 @@ public class AlighmentFilter<T> extends AbstractFilter<T> {
     public T read() {
         indsys.Data.Package pack = (Package) ((Pipe) pipe).getNext();
         StringBuilder builder = new StringBuilder();
-        if(pack.getIndex() != -2){
+        if(pack.getIndex() != -2 && !pack.getValue().equals("")){
             switch (alignmentEnum){
                 case LEFT:
                     int stringLengthL = ((String)pack.getValue()).length();
@@ -60,8 +60,11 @@ public class AlighmentFilter<T> extends AbstractFilter<T> {
                     }
                     break;
             }
+            return (T)new PackageLine(pack.getIndex(),builder.toString());
+        }else{
+            return (T)new PackageEndFile();
         }
-        return (T)new PackageLine(pack.getIndex(),builder.toString());
+
     }
 
     @Override
@@ -70,12 +73,12 @@ public class AlighmentFilter<T> extends AbstractFilter<T> {
     }
 
     public static void main(String[] args) {
-        SourceFileChar charFile = new SourceFileChar(new File("aliceInWonderland.txt"));
+        SourceFileChar charFile = new SourceFileChar(new File("aliceInWonderland2.txt"));
         FileReadFilterChar  fileReadFilterChar = new FileReadFilterChar(charFile);
         BufferedPipeExtended bufferedPipeExtended = new BufferedPipeExtended(fileReadFilterChar);
         WordBuilderFilter wordBuilderFilter = new WordBuilderFilter(bufferedPipeExtended);
         BufferedPipeExtended bufferedPipeExtended2  =new BufferedPipeExtended(wordBuilderFilter);
-        LinesGeneratorFilter linesGeneratorFilter = new LinesGeneratorFilter(bufferedPipeExtended2,10);
+        LinesGeneratorFilter linesGeneratorFilter = new LinesGeneratorFilter(bufferedPipeExtended2,40);
         BufferedPipeExtended bufferedPipeExtended3 = new BufferedPipeExtended(linesGeneratorFilter);
         AlighmentFilter alighmentFilter = new AlighmentFilter(AlignmentEnum.CENTER,bufferedPipeExtended3);
         Package pack = (Package) alighmentFilter.read();
