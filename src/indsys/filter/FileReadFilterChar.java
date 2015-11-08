@@ -2,26 +2,16 @@ package indsys.filter;
 
 import indsys.Data.*;
 import indsys.Data.Package;
-import indsys.pipes.PipeImpl;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.LinkedList;
 
 /**
  * Created by mod on 11/6/15.
  */
 public class FileReadFilterChar<T> extends AbstractFilter {
-    private int _currentPos = 0;
-    private T _in;
-    private T _out;
 
-    public FileReadFilterChar(T in, T out) {
-        _in = in;
-        _out = out;
-    }
+    private T _in;
+
     public FileReadFilterChar(T in){
         _in = in;
     }

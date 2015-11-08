@@ -14,7 +14,6 @@ import java.util.LinkedList;
  */
 public class Splitfilter<T> extends AbstractFilter<T>{
     private T pipe;
-    private T _out;
    private int index = 0;
     LinkedList<String> buffer = new LinkedList<>();
     public Splitfilter(T pipe){

@@ -1,5 +1,4 @@
-import indsys.filter.*;
-import indsys.pipes.PipeImpl;import java.lang.String;import java.lang.System;import java.lang.Thread;
+import java.lang.String;import java.lang.System;import java.lang.Thread;
 
 /**
  * Created by mod on 10/29/15.
