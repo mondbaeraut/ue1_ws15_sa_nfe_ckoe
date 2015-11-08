@@ -23,7 +23,7 @@ public class AlighmentFilter<T> extends AbstractFilter<T> {
     public T read() {
         indsys.Data.Package pack = (Package) ((Pipe) pipe).getNext();
         StringBuilder builder = new StringBuilder();
-        if(pack.getIndex() != -2 && !pack.getValue().equals("")){
+        if(pack.getIndex() != -2){
             switch (alignmentEnum){
                 case LEFT:
                     int stringLengthL = ((String)pack.getValue()).length();
@@ -78,7 +78,7 @@ public class AlighmentFilter<T> extends AbstractFilter<T> {
         BufferedPipeExtended bufferedPipeExtended = new BufferedPipeExtended(fileReadFilterChar);
         WordBuilderFilter wordBuilderFilter = new WordBuilderFilter(bufferedPipeExtended);
         BufferedPipeExtended bufferedPipeExtended2  =new BufferedPipeExtended(wordBuilderFilter);
-        LinesGeneratorFilter linesGeneratorFilter = new LinesGeneratorFilter(bufferedPipeExtended2,40);
+        LinesGeneratorFilter linesGeneratorFilter = new LinesGeneratorFilter(bufferedPipeExtended2,200);
         BufferedPipeExtended bufferedPipeExtended3 = new BufferedPipeExtended(linesGeneratorFilter);
         AlighmentFilter alighmentFilter = new AlighmentFilter(AlignmentEnum.CENTER,bufferedPipeExtended3);
         Package pack = (Package) alighmentFilter.read();

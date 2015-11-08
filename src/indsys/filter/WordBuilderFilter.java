@@ -27,7 +27,7 @@ public class WordBuilderFilter<T> extends AbstractFilter<T> {
             if (pack.getIndex() != -2) {
                 char ctemp = ((char) pack.getValue());
 
-                if (ctemp != '\n') {
+                if (ctemp != '\n' && ctemp != '\r') {
                     if (ctemp != 65279 && ctemp != 32) {
                         word += ((char) pack.getValue());
                         wordstartfound = true;

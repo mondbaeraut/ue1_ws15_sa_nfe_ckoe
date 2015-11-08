@@ -70,12 +70,12 @@ public class LinesGeneratorFilter<T> extends AbstractFilter<T> {
     }
 
     public static void main(String[] args) {
-        SourceFileChar charFile = new SourceFileChar(new File("aliceInWonderland2.txt"));
+        SourceFileChar charFile = new SourceFileChar(new File("aliceInWonderland.txt"));
         FileReadFilterChar fileReadFilterChar = new FileReadFilterChar(charFile);
         BufferedPipeExtended bufferedPipeExtended = new BufferedPipeExtended(fileReadFilterChar);
         WordBuilderFilter wordBuilderFilter = new WordBuilderFilter(bufferedPipeExtended);
         BufferedPipeExtended bufferedPipeExtended2 = new BufferedPipeExtended(wordBuilderFilter);
-        LinesGeneratorFilter linesGeneratorFilter = new LinesGeneratorFilter(bufferedPipeExtended2, 9);
+        LinesGeneratorFilter linesGeneratorFilter = new LinesGeneratorFilter(bufferedPipeExtended2, 75);
         Package pack = (Package) linesGeneratorFilter.read();
         System.out.println(pack.toString());
         while (pack.getIndex() != -2) {
