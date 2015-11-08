@@ -25,7 +25,7 @@ public class AlighmentFilter<T> extends AbstractFilter<T> {
         StringBuilder builder = new StringBuilder();
         if(pack.getIndex() != -2){
             switch (alignmentEnum){
-                case LEFT:
+                case RIGHT:
                     int stringLengthL = ((String)pack.getValue()).length();
                     int numberofWhiteSpacesL = pack.getIndex()-stringLengthL;
                     if(numberofWhiteSpacesL >= 0){
@@ -35,7 +35,7 @@ public class AlighmentFilter<T> extends AbstractFilter<T> {
                         builder.append((String)pack.getValue());
                     }
                     break;
-                case RIGHT:
+                case LEFT:
                     int stringLengthR = ((String)pack.getValue()).length();
                     int numberofWhiteSpacesR = pack.getIndex()-stringLengthR;
                     if(numberofWhiteSpacesR >= 0){
@@ -80,7 +80,7 @@ public class AlighmentFilter<T> extends AbstractFilter<T> {
         BufferedPipeExtended bufferedPipeExtended2  =new BufferedPipeExtended(wordBuilderFilter);
         LinesGeneratorFilter linesGeneratorFilter = new LinesGeneratorFilter(bufferedPipeExtended2,200);
         BufferedPipeExtended bufferedPipeExtended3 = new BufferedPipeExtended(linesGeneratorFilter);
-        AlighmentFilter alighmentFilter = new AlighmentFilter(AlignmentEnum.CENTER,bufferedPipeExtended3);
+        AlighmentFilter alighmentFilter = new AlighmentFilter(AlignmentEnum.RIGHT,bufferedPipeExtended3);
         Package pack = (Package) alighmentFilter.read();
         while(pack.getIndex() != -2){
             System.out.println(pack.toString());

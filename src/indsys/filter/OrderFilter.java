@@ -99,7 +99,7 @@ public class OrderFilter<T> extends AbstractFilter<T> {
         endfound = false;
     }
     public static void main(String[] args) {
-        Pipe pipe = new BufferedPipe<>(4);
+      /*  Pipe pipe = new BufferedPipe<>(4);
         Pipe pipe2 = new BufferedPipe<>(4);
         Pipe pipe3 = new BufferedPipe<>(4);
         Pipe pipe4 = new BufferedPipe<>(4);
@@ -118,6 +118,6 @@ public class OrderFilter<T> extends AbstractFilter<T> {
             pipe3.clean();
             pipe4.clean();
             orderFilter.setEndFound();
-        }
+        }*/
     }
 }

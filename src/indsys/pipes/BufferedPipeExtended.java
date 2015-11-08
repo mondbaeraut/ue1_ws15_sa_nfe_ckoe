@@ -9,10 +9,6 @@ public class BufferedPipeExtended<T> implements Pipe {
     T in;
     T out;
 
-    public BufferedPipeExtended(T in, T out) {
-        this.in = in;
-        this.out = out;
-    }
     public BufferedPipeExtended(T in){
         this.in = in;
     }

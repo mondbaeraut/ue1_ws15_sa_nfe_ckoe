@@ -111,7 +111,7 @@ public class RotateFilter<T> extends AbstractFilter<T> {
         endfound = false;
     }
     public static void main(String[] args) {
-        Pipe pipe = new BufferedPipe<>(4);
+        /*Pipe pipe = new BufferedPipe<>(4);
         Pipe pipe2 = new BufferedPipe<>(4);
         Pipe pipe3 = new BufferedPipe<>(4);
         FileReadFilterLine frf = new FileReadFilterLine(new File("aliceInWonderland.txt"),pipe);
@@ -125,6 +125,6 @@ public class RotateFilter<T> extends AbstractFilter<T> {
             pipe2.clean();
             pipe3.clean();
         }
-        System.out.println("done");
+        System.out.println("done");*/
     }
 }

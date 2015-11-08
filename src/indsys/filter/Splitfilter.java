@@ -3,6 +3,7 @@ package indsys.filter;
 import indsys.Data.*;
 import indsys.Data.Package;
 import indsys.pipes.BufferedPipe;
+import indsys.pipes.BufferedPipeExtended;
 import indsys.pipes.Pipe;
 
 import java.io.File;
@@ -12,44 +13,34 @@ import java.util.LinkedList;
  * Created by mod on 10/30/15.
  */
 public class Splitfilter<T> extends AbstractFilter<T>{
-    private T _in;
+    private T pipe;
     private T _out;
-    boolean endFile = false;
-    boolean endfound = false;
-    public Splitfilter(T in,T out){
-        _in = in;
-        _out = out;
+   private int index = 0;
+    LinkedList<String> buffer = new LinkedList<>();
+    public Splitfilter(T pipe){
+        this.pipe = pipe;
     }
+
     @Override
     public T read(){
-        if(((Pipe)_out).isEmpty()) {
-            while (!endfound && !endFile) {
-                LinkedList<String> split = new LinkedList<>();
-                Package pair = (Package) ((Pipe) _in).getNext();
-                endfound = ((Pipe) _out).isFull();
-                if (endfound == false) {
-                    if (pair.getIndex() != -2) {
-                        if (pair.getIndex() != -1) {
-                            String[] arrtemp = ((String) pair.getValue()).split("\\s+");
-                            for (String t : arrtemp) {
-                                if (!t.equals("\uFEFF") && t.length() != 0) {
-                                    split.add(t);
-                                }
-                            }
-                            ((Pipe) _out).put(new PackageSplit(pair.getIndex(), split));
-                        } else {
-                            //((Pipe) _out).put(pair);
-                            endfound = true;
-                        }
-                    } else {
-                        ((Pipe)_out).put(pair);
-                        endFile = true;
-                    }
+
+
+            if (buffer.size() > 0) {
+                return (T)new PackageLine(index,buffer.removeFirst());
+            } else {
+                Package pair = (Package)((Pipe)pipe).getNext();
+                if(pair.getIndex() == -2) {
+                    return (T)new PackageEndFile();
                 }
+
+                String[] arrtemp = ((String) pair.getValue()).split("\\s+");
+                index = pair.getIndex();
+                for(String st:arrtemp) {
+                    buffer.add(st);
+                }
+
+                return (T)new PackageLine(index,buffer.removeFirst());
             }
-        }
-        endfound = false;
-        return _out;
     }
 
     /**
@@ -79,23 +70,21 @@ public class Splitfilter<T> extends AbstractFilter<T>{
             }*/
 
     }
-    public boolean isEndFile(){
-        return endFile;
-    }
-    public void setEndFound(){
-        endfound = false;
-    }
+
     public static void main(String[] args) {
-        BufferedPipe pipe = new BufferedPipe<>(4);
-        BufferedPipe pipe2 = new BufferedPipe<>(4);
-        FileReadFilterLine frf = new FileReadFilterLine(new File("aliceInWonderland.txt"), pipe);
-        Splitfilter splitfilter = new Splitfilter(pipe, pipe2);
-        while(!splitfilter.isEndFile()) {
-            frf.read();
-            System.out.println(splitfilter.read().toString());
-            pipe.clean();
-            pipe2.clean();
-            splitfilter.setEndFound();
+        System.out.println("dsad");
+        SourceFileLine sourceFileLine = new SourceFileLine(new File("aliceInWonderland.txt"));
+        FileReadFilterLine fileReadFilterLine = new FileReadFilterLine(sourceFileLine);
+
+        BufferedPipeExtended pipe = new BufferedPipeExtended(fileReadFilterLine);
+
+        Splitfilter splitfilter = new Splitfilter(pipe);
+        Package pack = (Package) splitfilter.read();
+        System.out.println(pack.toString());
+        while (pack.getIndex() != -2) {
+            pack = (Package) splitfilter.read();
+            System.out.println(pack.toString());
+
         }
         }
 }

@@ -99,10 +99,10 @@ public class UslessWordsFilter<T> extends AbstractFilter<T> {
         Pipe pipe2 = new BufferedPipe<>(4);
         Pipe pipe3 = new BufferedPipe<>(4);
         Pipe pipe4 = new BufferedPipe<>(4);
-        FileReadFilterLine frf = new FileReadFilterLine(new File("aliceInWonderland.txt"),pipe);
+       // FileReadFilterLine frf = new FileReadFilterLine(new File("aliceInWonderland.txt"),pipe);
 
 
-        AbstractFilter splitFilter = new Splitfilter<>(pipe,pipe2);
+        //AbstractFilter splitFilter = new Splitfilter<>(pipe,pipe2);
 
 
         RotateFilter rotateFilter = new RotateFilter(pipe2,pipe3);
@@ -110,8 +110,8 @@ public class UslessWordsFilter<T> extends AbstractFilter<T> {
 
         UslessWordsFilter uslessWordsFilter = new UslessWordsFilter(pipe3,pipe4);
         while(!uslessWordsFilter.isEndFile()) {
-            frf.read();
-            splitFilter.read();
+           // frf.read();
+          //  splitFilter.read();
             rotateFilter.read();
             System.out.println(uslessWordsFilter.read());
             pipe.clean();

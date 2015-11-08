@@ -3,7 +3,7 @@ package indsys.filter;
 import indsys.Data.*;
 import indsys.Data.Package;
 import indsys.pipes.BufferedPipe;
-import indsys.pipes.Pipe;
+import indsys.pipes.BufferedPipeExtended;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,71 +14,26 @@ import java.util.LinkedList;
 /**
  * Created by mod on 10/29/15.
  */
-public class FileReadFilterLine<T> extends AbstractFilter<T> {
-    private int _currentPos = 0;
+public class FileReadFilterLine<T> extends AbstractFilter<Package> {
     private T _in;
-    private T _out;
-    private LinkedList<PackageLine> packageLineLinkedList = new LinkedList<>();
 
-    private boolean endFile = false;
-    private boolean endfound = false;
 
-    public FileReadFilterLine(T in, T out) {
+    public FileReadFilterLine(T in) {
         _in = in;
-        _out = out;
-        readFile();
     }
 
-    private void readFile() {
-        BufferedReader br = null;
-        try {
-
-            String sCurrentLine;
-
-            br = new BufferedReader(new FileReader((File) _in));
-            int index = 0;
-            while ((sCurrentLine = br.readLine()) != null) {
-                if (!sCurrentLine.equals("")) {
-                    packageLineLinkedList.add(new PackageLine(index, sCurrentLine));
-                }
-                index++;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    @Override
+    public Package read() {
+        Package pack = (Package)((SourceFileLine)_in).getNextLine();
+        if(pack.getIndex() != -2) {
+            return pack;
+        }else{
+            return new PackageEndFile();
         }
     }
 
     @Override
-    public T read() {
-        if (((Pipe) _out).isEmpty()) {
-            while (!endfound && !endFile) {
-                //indsys.Data.Package pair = (Package) ((PipeImpl) _in).getNext();
-                if (endfound == false) {
-                    if (packageLineLinkedList.size() > 0) {
-                        endfound = ((Pipe) _out).isFull();
-                        if (endfound == false) {
-                            Package pack = packageLineLinkedList.removeFirst();
-                            ((Pipe) _out).put(pack);
-                        }
-
-                    } else {
-                        endFile = true;
-                        ((Pipe) _out).put(new PackageEndFile());
-                        endfound = true;
-                    }
-                }
-
-            }
-        }
-
-        //   ((Pipe) _out).put(new PackageEnd());
-        System.out.println("--------------------------------------------------");
-        endfound = false;
-        return _out;
-    }
-
-    @Override
-    public void write(T value) {
+    public void write(Package value) {
         BufferedReader br = null;
         try {
 
@@ -101,21 +56,16 @@ public class FileReadFilterLine<T> extends AbstractFilter<T> {
 
     }
 
-    public boolean isEndFile() {
-        return endFile;
-    }
-
-    public void setEndFound() {
-        endfound = false;
-    }
-
     public static void main(String[] args) {
-        BufferedPipe pipe1 = new BufferedPipe(4);
-        FileReadFilterLine frf = new FileReadFilterLine(new File("aliceInWonderland.txt"), pipe1);
-        while (!frf.isEndFile()) {
-            pipe1 = (BufferedPipe) frf.read();
-            System.out.println(pipe1.toString());
-            pipe1.clean();
+        SourceFileLine sourceFileLine = new SourceFileLine(new File("aliceInWonderland.txt"));
+        FileReadFilterLine fileReadFilterLine = new FileReadFilterLine(sourceFileLine);
+
+        Package pack = (Package) fileReadFilterLine.read();
+        System.out.println(pack.toString());
+        while (pack.getIndex() != -2) {
+            pack = (Package) fileReadFilterLine.read();
+            System.out.println(pack.toString());
+
         }
     }
 }

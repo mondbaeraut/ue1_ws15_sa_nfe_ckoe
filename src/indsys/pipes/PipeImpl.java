@@ -1,9 +1,5 @@
 package indsys.pipes;
 
-import indsys.Data.PackageEnd;
-import indsys.Data.PipeFull;
-import indsys.interfaces.IOable;
-
 import java.util.LinkedList;
 
 /**
