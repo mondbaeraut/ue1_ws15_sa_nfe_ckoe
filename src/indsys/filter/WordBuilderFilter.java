@@ -12,37 +12,40 @@ import java.io.File;
  */
 public class WordBuilderFilter<T> extends AbstractFilter<T> {
     public T pipe;
-    public WordBuilderFilter(T pipe){
+
+    public WordBuilderFilter(T pipe) {
         this.pipe = pipe;
     }
+
     @Override
     public T read() {
         boolean wholewordfound = false;
         boolean wordstartfound = false;
         String word = "";
-        while(!wholewordfound) {
+        while (!wholewordfound) {
             Package pack = (Package) ((Pipe) pipe).getNext();
-            char ctemp = ((char)pack.getValue());
-            if(pack.getIndex() != -2) {
-               if(ctemp != '\n') {
-                   if (ctemp != 65279 && ctemp != 32) {
-                       word += ((char) pack.getValue());
-                       wordstartfound = true;
-                   } else {
-                       if (wordstartfound) {
-                           wholewordfound = true;
-                       }
-                   }
-               }else{
-                   if(wordstartfound){
-                       wholewordfound = true;
-                   }
-               }
-            }else{
-                return (T)pack;
+            if (pack.getIndex() != -2) {
+                char ctemp = ((char) pack.getValue());
+
+                if (ctemp != '\n') {
+                    if (ctemp != 65279 && ctemp != 32) {
+                        word += ((char) pack.getValue());
+                        wordstartfound = true;
+                    } else {
+                        if (wordstartfound) {
+                            wholewordfound = true;
+                        }
+                    }
+                } else {
+                    if (wordstartfound) {
+                        wholewordfound = true;
+                    }
+                }
+            } else {
+                return (T) pack;
             }
         }
-        return (T)new PackageLine(0,word);
+        return (T) new PackageLine(0, word);
     }
 
     @Override
@@ -50,22 +53,6 @@ public class WordBuilderFilter<T> extends AbstractFilter<T> {
 
     }
 
-    private Package buildWord(Package pack){
-        boolean wordcomplete = false;
-        String word = "";
-        while(!wordcomplete){
-            if(((char)pack.getValue()) != 65279){
-                word += (char)pack.getValue();
-
-            }else{
-                System.out.println((int)'\uFEFF');
-                if(word.length() > 0){
-                    wordcomplete = true;
-                }
-            }
-        }
-        return new PackageLine(1,word);
-    }
 
     public static void main(String[] args) {
         SourceFileChar charFile = new SourceFileChar(new File("aliceInWonderland.txt"));
@@ -74,9 +61,10 @@ public class WordBuilderFilter<T> extends AbstractFilter<T> {
         WordBuilderFilter wordBuilderFilter = new WordBuilderFilter(bufferedPipeExtended);
 
         Package pack = (Package) wordBuilderFilter.read();
-        while(pack.getIndex() != -2){
-            System.out.println(pack.toString());
+        System.out.println(pack.toString());
+        while (pack.getIndex() != -2) {
             pack = (Package) wordBuilderFilter.read();
+            System.out.println(pack.toString());
 
         }
     }

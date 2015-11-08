@@ -1,8 +1,7 @@
 package indsys.filter;
 
-import indsys.Data.PackageEndFile;
-import indsys.Data.PackageLine;
-import indsys.Data.SourceFileChar;
+import indsys.Data.*;
+import indsys.Data.Package;
 import indsys.pipes.PipeImpl;
 
 import java.io.BufferedReader;
@@ -28,7 +27,12 @@ public class FileReadFilterChar<T> extends AbstractFilter {
     }
     @Override
     public Object read() {
-        return ((SourceFileChar)_in).getNextChar();
+        Package pack = (Package)((SourceFileChar)_in).getNextChar();
+        if(pack.getIndex() != -2) {
+            return pack;
+        }else{
+            return new PackageEndFile();
+        }
     }
 
     @Override
@@ -39,7 +43,13 @@ public class FileReadFilterChar<T> extends AbstractFilter {
     public static void main(String[] args) {
         SourceFileChar charFile = new SourceFileChar(new File("aliceInWonderland.txt"));
         FileReadFilterChar fileReadFilterChar = new FileReadFilterChar(charFile);
-        fileReadFilterChar.read();
+        Package pack = (Package) fileReadFilterChar.read();
+        System.out.println(pack.toString());
+        while(pack.getIndex() != -2){
+            pack = (Package) fileReadFilterChar.read();
+            System.out.println(pack.toString());
+        }
+
         System.out.println("done");
     }
 }
